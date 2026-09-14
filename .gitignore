@@ -1,0 +1,8 @@
+build/*
+!build/*.txt
+*.o
+*.so
+*.a
+*.ko
+/core
+/core.*

@@ -1,0 +1,13 @@
+[33m[*] [0mkernel: 5.4.61-qgki
+[32m[+] [0moffsets matched: 5.4.61-qgki
+[33m[*] [0minit_cred image=ffffffc012385f50 alias=ffffffc002905f50
+[32m[+] [0mKASLR _text=ffffffd1d8c80000 slide=00000011c8c00000
+[31m[-] [0mKernelSnitch mm_struct leak failed
+[31m[-] [0mprepare_kernel_page retry 1/4
+[31m[-] [0mKernelSnitch mm_struct leak failed
+[31m[-] [0mprepare_kernel_page retry 2/4
+[31m[-] [0mKernelSnitch mm_struct leak failed
+[31m[-] [0mprepare_kernel_page retry 3/4
+[31m[-] [0mKernelSnitch mm_struct leak failed
+[31m[-] [0mprepare_kernel_page retry 4/4
+[33m[*] [0mpage preflight base=0000000000000000 fake_lock=0000000000000000 fake_task=0000000000000000 fake_fops=0000000000000000

